@@ -34,9 +34,26 @@ rl.on('line', lineString => {
       prefectureDataMap.set(prefecture, value);
     }
   });
-  rl.on('close', () => {
-    console.log(prefectureDataMap);
+rl.on('close', () => {
+for (let [key, value] of prefectureDataMap) {
+    value.change = value.popu15 / value.popu10;
+}
+const rankingArray = Array.from(prefectureDataMap).sort((pair1, pair2) => {
+    return pair2[1].change - pair1[1].change;
+});
+const rankingStrings = rankingArray.map(([key, value]) => {
+    return (
+      key +
+      ': ' +
+      value.popu10 +
+      '=>' +
+      value.popu15 +
+      ' change rate:' +
+      value.change
+    );
   });
+  console.log(rankingStrings);
+});
 //when 'line' event occurs on 'rl' object, call this function.
 
 //The 'line' event is emitted whenever the input stream receives an end-of-line input (\n, \r, or \r\n). 
